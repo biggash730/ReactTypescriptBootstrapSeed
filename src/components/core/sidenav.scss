@@ -12,10 +12,10 @@ $sidebar-width: 14rem;
     .nav {
         a {
             color: #685757;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             line-height: 35px;
-            border-bottom: solid 1px #ddd;
+            // border-bottom: solid 1px #ddd;
         }
 
         i {
@@ -30,6 +30,8 @@ $sidebar-width: 14rem;
     .active {
         border-right: solid 5px #007bff;
         background-color: rgba(0, 0, 0, 0.05);
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 }
 
