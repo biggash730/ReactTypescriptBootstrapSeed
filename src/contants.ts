@@ -1,4 +1,5 @@
 export class RouteNames {
+  static login = '/login'
   static dashboard = '/dashboard'
   static products = '/products'
   static reports = '/reports'

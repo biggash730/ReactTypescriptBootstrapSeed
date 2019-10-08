@@ -1,5 +1,7 @@
 import React from 'react'
 import './navbar.scss'
+import { NavLink } from 'react-router-dom'
+import { RouteNames } from '../../contants'
 
 export interface NavbarProps {}
 
@@ -10,9 +12,9 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
-        <a className="navbar-brand" href="#">
+        <NavLink className="navbar-brand" to={RouteNames.dashboard}>
           React App
-        </a>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"

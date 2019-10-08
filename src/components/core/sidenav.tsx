@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './sidenav.scss'
 
 export interface MenuItem {
@@ -21,7 +21,6 @@ class SideNav extends React.Component<SideNavProps, SideNavState> {
     menus: this.props.menus
   }
   render() {
-    console.log(this.props)
     return (
       <nav className="sidebar flex-shrink-0">
         <ul className="nav flex-column flex-nowrap">
