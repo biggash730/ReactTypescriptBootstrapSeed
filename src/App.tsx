@@ -8,6 +8,7 @@ import MainContent from './components/core/mainContent'
 // import Topnav from './components/core/topnav'
 import { RouteNames } from './contants'
 import { authService } from './components/auth/authService'
+import './helpers/interceptor'
 
 const menus = [
   {
@@ -56,10 +57,7 @@ const App: React.FC = () => {
         {/* <Topnav menus={menus} /> */}
         <div id="wrapper" className="flex-row flex-grow-1">
           {isLoggedIn && <SideNav menus={menus} />}
-          <MainContent
-            loggedIn={isLoggedIn}
-            onLogIn={handleOnlogin}
-          ></MainContent>
+          <MainContent loggedIn={isLoggedIn} onLogIn={handleOnlogin}></MainContent>
         </div>
       </Router>
     </React.Fragment>

@@ -15,3 +15,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
+
+.invalid-msg {
+  padding: 10px;
+  color: red !important;
+  font-size: 13px !important;
+  text-align: left;
+}

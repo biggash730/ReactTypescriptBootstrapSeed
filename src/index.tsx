@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import 'toastr/build/toastr.min.css'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 

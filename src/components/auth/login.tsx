@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik'
+import * as Yup from 'yup'
 import './login.scss'
 import { authService } from './authService'
 
@@ -9,149 +11,102 @@ export interface LoginProps {
 
 export interface LoginState {}
 
+export interface LoginParams {
+  username: string
+  password: string
+  rememberMe: boolean
+}
+
 class Login extends React.Component<LoginProps, LoginState> {
   // state = { :  }
 
-  login = () => {
-    authService.login()
-    this.props.onLogIn(true)
-    this.props.history.push('/dashboard')
+  login = (params: LoginParams) => {
+    authService
+      .login(params)
+      .then(user => {
+        authService.authenticated = true
+        authService.setUser(user)
+        this.props.onLogIn(true)
+        this.props.history.push('/dashboard')
+      })
+      .catch(err => {})
   }
+
+  loginSchema = Yup.object().shape({
+    username: Yup.string().required(),
+    password: Yup.string().required()
+  })
+
   render() {
     return (
-      //   <div className="row mt-5">
-      //     <div className="col-sm-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-      //       <div className="card shadow">
-      //         <div className="card-body px-5">
-      //           <h5 className="card-title text-center text-uppercase">Login</h5>
-      //           <div className="text-center">
-      //             <img
-      //               src={require('./login.png')}
-      //               alt="Login Logo"
-      //               height="80"
-      //               width="80"
-      //             />
-      //           </div>
-      //           <form>
-      //             <div className="form-group mb-4">
-      //               <label>Username</label>
-      //               {/* <div className="input-group mb-2">
-      //                   <div className="input-group-prepend">
-      //                     <div className="input-group-text">@</div>
-      //                   </div>
-
-      //                 </div> */}
-      //               <input
-      //                 type="text"
-      //                 className="form-control"
-      //                 placeholder="Username"
-      //               />
-      //             </div>
-
-      //             <div className="form-group mb-4">
-      //               <label>Password</label>
-      //               {/* <div className="input-group mb-2">
-      //                   <div className="input-group-prepend">
-      //                     <div className="input-group-text">
-      //                       <i className="fas fa-lock"></i>
-      //                     </div>
-      //                   </div>
-
-      //                 </div> */}
-      //               <input
-      //                 type="password"
-      //                 className="form-control"
-      //                 placeholder="Password"
-      //               />
-      //             </div>
-
-      //             <div className="form-group">
-      //               <div className="custom-control custom-checkbox">
-      //                 <input
-      //                   type="checkbox"
-      //                   className="custom-control-input"
-      //                   id="customCheck1"
-      //                 />
-      //                 <label
-      //                   className="custom-control-label"
-      //                   htmlFor="customCheck1"
-      //                 >
-      //                   Remember Me
-      //                 </label>
-      //               </div>
-      //             </div>
-
-      //             <button
-      //               type="submit"
-      //               className="btn btn-primary btn-block mb-3"
-      //             >
-      //               Submit
-      //             </button>
-      //           </form>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </div>
-
       <div className="container d-flex align-content-center">
         <div className="card shadow mx-auto login-card">
           <div className="card-body px-5">
             <h5 className="card-title text-center text-uppercase">Login</h5>
             <div className="text-center">
               <img
-                src={require('./login.png')}
+                src={require('../../assets/images/login.png')}
                 alt="Login Logo"
                 height="80"
                 width="80"
               />
             </div>
-            <form>
-              <div className="form-group mb-4">
-                <label>Username</label>
-                <div className="input-group mb-2">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">@</div>
+            <Formik
+              initialValues={{ username: '', password: '', rememberMe: false }}
+              validationSchema={this.loginSchema}
+              onSubmit={(values: LoginParams, actions: FormikActions<LoginParams>) => {
+                this.login(values)
+                actions.setSubmitting(false)
+              }}
+              render={({ errors, status, touched, isSubmitting }) => (
+                <Form>
+                  <div className="form-group mb-4">
+                    <label>Username</label>
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">@</div>
+                      </div>
+                      <Field type="text" className="form-control" name="username" />
+                    </div>
+                    <ErrorMessage name="username" component="div" className="invalid-msg" />
                   </div>
-                  <input type="text" className="form-control" />
-                </div>
-              </div>
 
-              <div className="form-group mb-4">
-                <label>Password</label>
-                <div className="input-group mb-2">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">
-                      <i className="fas fa-lock"></i>
+                  <div className="form-group mb-4">
+                    <label>Password</label>
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">
+                          <i className="fas fa-lock"></i>
+                        </div>
+                      </div>
+                      <Field type="password" className="form-control" name="password" />
+                    </div>
+                    <ErrorMessage name="password" component="div" className="invalid-msg" />
+                  </div>
+
+                  <div className="form-group">
+                    <div className="custom-control custom-checkbox">
+                      <Field
+                        type="checkbox"
+                        className="custom-control-input"
+                        id="customCheck1"
+                        name="rememberMe"
+                      />
+                      <label className="custom-control-label" htmlFor="customCheck1">
+                        Remember Me
+                      </label>
                     </div>
                   </div>
-                  <input type="password" className="form-control" />
-                </div>
-              </div>
 
-              <div className="form-group">
-                <div className="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="customCheck1"
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="customCheck1"
-                  >
-                    Remember Me
-                  </label>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="btn btn-primary btn-block"
-                onClick={this.login}
-              >
-                Submit
-              </button>
-            </form>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-block"
+                    disabled={isSubmitting}>
+                    Submit
+                  </button>
+                </Form>
+              )}
+            />
           </div>
         </div>
       </div>
