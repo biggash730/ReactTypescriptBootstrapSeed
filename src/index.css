@@ -22,3 +22,15 @@ body {
   font-size: 13px !important;
   text-align: left;
 }
+
+.table {
+  margin-bottom: 0 !important;
+}
+
+.btn {
+  margin-right: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}

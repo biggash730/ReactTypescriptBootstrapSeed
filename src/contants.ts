@@ -6,4 +6,5 @@ export class RouteNames {
   static settings = '/settings'
   static users = '/users'
   static roles = '/roles'
+  static form = 'form'
 }

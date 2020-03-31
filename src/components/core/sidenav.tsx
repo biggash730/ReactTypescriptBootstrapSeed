@@ -26,11 +26,7 @@ class SideNav extends React.Component<SideNavProps, SideNavState> {
         <ul className="nav flex-column flex-nowrap">
           {this.state.menus.map(menu => (
             <li className="nav-item" key={menu.label}>
-              <NavLink
-                className="nav-link p-3"
-                to={menu.route}
-                activeClassName="active"
-              >
+              <NavLink className="nav-link p-3" to={menu.route} activeClassName="active">
                 <i className={menu.icon}></i> {menu.label}
               </NavLink>
             </li>

@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { LoginParams } from './login'
+import { User } from './auth.models'
 
 class AuthService {
   private static autherService: AuthService
   private _authenticated: boolean
-  currentUser: any // todo: change to correct type
+  currentUser: User
 
   constructor() {
-    this.currentUser = localStorage.getItem('currentUser')
+    this.currentUser = this.getUser()
     this._authenticated = !!this.currentUser
   }
 

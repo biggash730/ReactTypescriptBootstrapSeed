@@ -1,9 +1,13 @@
 import axios from 'axios'
 import { Toast } from './message_helper'
+import { authService } from '../components/auth/authService'
 
 axios.interceptors.request.use(
   config => {
-    // todo: get token and set in header
+    if (authService.currentUser) {
+      const user = authService.currentUser
+      config.headers = { Authorization: `Bearer ${user.token}` }
+    }
     return config
   },
   err => {
@@ -16,7 +20,7 @@ axios.interceptors.response.use(
     if (response.data && response.data.message) {
       Toast.success(response.data.message)
     }
-    return response.data
+    return response
   },
   err => {
     if (err.response) {

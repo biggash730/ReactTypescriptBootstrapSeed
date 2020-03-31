@@ -98,12 +98,22 @@ class Login extends React.Component<LoginProps, LoginState> {
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block"
-                    disabled={isSubmitting}>
-                    Submit
-                  </button>
+                  {!isSubmitting && (
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-block"
+                      disabled={isSubmitting}>
+                      Login
+                    </button>
+                  )}
+                  {isSubmitting && (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block"
+                      disabled={isSubmitting}>
+                      <i className="fas fa-spinner fa-spin"></i> &nbsp; Authenticating
+                    </button>
+                  )}
                 </Form>
               )}
             />

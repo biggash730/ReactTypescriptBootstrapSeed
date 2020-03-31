@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'toastr/build/toastr.min.css'
+import 'react-block-ui/style.css'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
