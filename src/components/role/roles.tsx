@@ -6,28 +6,23 @@ import { RouteNames } from '../../contants'
 import RoleForm from './role-form'
 import { History } from 'history'
 import BlockUi from 'react-block-ui'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+import { fetchRoles } from '../../redux/actions/roleActions'
+import { AppState } from '../../redux/store'
 
 export interface RolesProps {
   history: History
   match: RouteProps
-}
-
-export interface RolesState {
   roles: Role[]
   blocking: boolean
+  dispatch: any
 }
 
-class Roles extends React.Component<RolesProps, RolesState> {
-  state: RolesState = { roles: [], blocking: false }
-
+class Roles extends React.Component<RolesProps> {
   componentDidMount() {
-    this.setState({ blocking: true })
-    axios
-      .get(`/api/role`)
-      .then(res => {
-        this.setState({ roles: res.data, blocking: false })
-      })
-      .catch(() => this.setState({ blocking: false }))
+    const { dispatch } = this.props
+    dispatch(fetchRoles())
   }
 
   gotoForm = () => {
@@ -40,6 +35,7 @@ class Roles extends React.Component<RolesProps, RolesState> {
 
   render() {
     const { path } = this.props.match
+    const { roles, blocking } = this.props
     return (
       <div>
         <Route
@@ -47,7 +43,7 @@ class Roles extends React.Component<RolesProps, RolesState> {
           path="/roles"
           render={() => (
             <div>
-              <BlockUi blocking={this.state.blocking} tag="div" message="Loading...">
+              <BlockUi blocking={blocking} tag="div" message="Loading...">
                 <div className="row mb-3">
                   <div className="col-sm-12">
                     <button
@@ -73,7 +69,7 @@ class Roles extends React.Component<RolesProps, RolesState> {
                             </tr>
                           </thead>
                           <tbody>
-                            {this.state.roles.map((role: Role, i: number) => (
+                            {roles.map((role: Role, i: number) => (
                               <tr
                                 className="pointer"
                                 key={role.id}
@@ -105,4 +101,9 @@ class Roles extends React.Component<RolesProps, RolesState> {
   }
 }
 
-export default Roles
+const mapStateToProps = (state: AppState) => ({
+  blocking: state.roleState.blocking,
+  roles: state.roleState.roles
+})
+
+export default connect(mapStateToProps)(Roles)
