@@ -33,7 +33,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prestart:api": "node tools/createMockDb.js",
+    "start:api": "node tools/apiServer.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -56,6 +58,7 @@
     "@types/react-router-dom": "^5.1.0",
     "@types/react-select": "^3.0.8",
     "@types/toastr": "^2.1.37",
-    "@types/yup": "^0.26.24"
+    "@types/yup": "^0.26.24",
+    "json-server": "^0.16.1"
   }
 }

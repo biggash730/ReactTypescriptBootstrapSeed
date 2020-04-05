@@ -16,13 +16,12 @@ export interface RolesProps {
   match: RouteProps
   roles: Role[]
   blocking: boolean
-  dispatch: any
+  fetchRoles(): Promise<void>
 }
 
 class Roles extends React.Component<RolesProps> {
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchRoles())
+    this.props.fetchRoles()
   }
 
   gotoForm = () => {
@@ -102,8 +101,12 @@ class Roles extends React.Component<RolesProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  blocking: state.roleState.blocking,
-  roles: state.roleState.roles
+  roles: state.roles,
+  blocking: state.blocking
 })
 
-export default connect(mapStateToProps)(Roles)
+const mapDispatchToProps = {
+  fetchRoles
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Roles)

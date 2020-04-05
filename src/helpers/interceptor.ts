@@ -17,8 +17,19 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   response => {
-    if (response.data && response.data.message) {
-      Toast.success(response.data.message)
+    switch (response.status) {
+      case 201:
+        Toast.success('Record saved successfully')
+        break
+      case 204:
+        if (response.config.method === 'delete') {
+          Toast.success('Record deleted successfully')
+        } else if (response.config.method === 'put') {
+          Toast.success('Record updated successfully')
+        }
+        break
+      default:
+        break
     }
     return response
   },

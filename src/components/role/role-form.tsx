@@ -7,91 +7,72 @@ import axios from 'axios'
 import { History } from 'history'
 import BlockUi from 'react-block-ui'
 import { MessageDialog } from '../../helpers/message_helper'
+import { AppState } from '../../redux/store'
+import { connect } from 'react-redux'
+import { saveRole, fetchRoles, deleteRole } from '../../redux/actions/roleActions'
+import { RouteNames } from '../../contants'
 
 export interface RoleFormProps {
   history: History
   match: any
+  role: any
+  blocking: boolean
+  saveRole(role: Role): Promise<void>
+  fetchRoles(): Promise<void>
+  deleteRole(id: number): Promise<void>
 }
 
 export interface RoleFormState {
   permissions: []
-  blocking: boolean
-  id: string
-  role: Role
-  selected: any
 }
+
+const emptyRole = { name: '', permissions: '', notes: '' }
 
 class RoleForm extends React.Component<RoleFormProps, RoleFormState> {
   state: RoleFormState = {
-    permissions: [],
-    blocking: false,
-    id: '',
-    role: { name: '', permissions: '', notes: '' },
-    selected: null
+    permissions: []
   }
 
   componentDidMount() {
     axios.get(`/api/role/permissions`).then(res => {
       this.setState({ permissions: res.data })
     })
-
-    const { id } = this.props.match.params
-    this.setState({ id: id })
-    if (id) {
-      this.setState({ blocking: true })
-      axios
-        .get(`/api/role/${id}`)
-        .then(res => {
-          const selected = (res.data.permissions as string).split(', ').map(elm => {
-            return { name: elm }
-          })
-          const role: Role = res.data
-          role.notes = role.notes || ''
-          this.setState({ blocking: false, role: role, selected: selected })
-        })
-        .catch(() => this.setState({ blocking: false }))
-    }
   }
 
-  handleSubmit = (values: Role, actions: FormikActions<Role>) => {
-    this.setState({ blocking: true })
-    axios
-      .post('/api/role', values)
-      .then(res => {
-        this.closeForm()
-      })
-      .catch(() => this.setState({ blocking: false }))
+  handleSubmit = (role: Role, actions: FormikActions<Role>) => {
+    role.permissions = (role.perms && role.perms.map((obj: any) => obj.name).join(', ')) || ''
+    this.props.saveRole(role).then(() => {
+      this.props.fetchRoles()
+      this.closeForm()
+    })
   }
 
   handleDelete = () => {
     MessageDialog.confirm('Delete Role', 'Are you sure you want to delete this role').then(
       confirm => {
         if (confirm.value) {
-          this.setState({ blocking: true })
-          axios.delete(`/api/role/${this.state.id}`).then(res => {
-            this.setState({ blocking: false })
-            this.closeForm()
-          })
+          this.props.deleteRole(+this.props.match.params.id)
+          this.closeForm()
         }
       }
     )
   }
 
   closeForm = () => {
-    this.props.history.goBack()
+    this.props.history.push(RouteNames.roles)
   }
 
   roleSchema = Yup.object().shape({
     name: Yup.string().required(),
-    permissions: Yup.string().required()
+    perms: Yup.array().required()
   })
   render() {
     return (
       <div className="row">
         <div className="col-sm-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-          <BlockUi blocking={this.state.blocking} tag="div" message="Saving...">
+          <BlockUi blocking={this.props.blocking} tag="div" message="Saving...">
             <Formik
-              initialValues={this.state.role}
+              initialValues={this.props.role}
               enableReinitialize
               validationSchema={this.roleSchema}
               onSubmit={this.handleSubmit}
@@ -109,24 +90,15 @@ class RoleForm extends React.Component<RoleFormProps, RoleFormState> {
                       <div className="form-group">
                         <label>Privileges</label>
                         <Select
-                          name="permissions"
+                          name="perms"
                           isMulti
                           options={this.state.permissions}
                           getOptionValue={(option: any) => option['name']}
                           getOptionLabel={(option: any) => option['name']}
-                          value={this.state.selected}
+                          value={this.props.role.perms}
                           closeMenuOnSelect={false}
                           onChange={(option: any) => {
-                            let perms =
-                              option &&
-                              option.reduce((acc: string, elm: any, index: number, array: []) => {
-                                return index < array.length - 1
-                                  ? (acc += `${elm.name}, `)
-                                  : (acc += `${elm.name}`)
-                              }, '')
-                            console.log(option)
-                            this.setState({ selected: option })
-                            formik.setFieldValue('permissions', perms)
+                            formik.setFieldValue('perms', option)
                           }}
                         />
                         <ErrorMessage name="permissions" component="div" className="invalid-msg" />
@@ -149,7 +121,7 @@ class RoleForm extends React.Component<RoleFormProps, RoleFormState> {
                           onClick={this.closeForm}>
                           <i className="fas fa-times"></i> Close
                         </button>
-                        {this.state.id && (
+                        {this.props.match.params.id && (
                           <button
                             type="button"
                             className="btn btn-danger float-left"
@@ -170,4 +142,35 @@ class RoleForm extends React.Component<RoleFormProps, RoleFormState> {
   }
 }
 
-export default RoleForm
+const getRoleById = (roles: Role[], id: number) => {
+  const role = roles.find(r => r.id === id) || emptyRole
+  const perms = splitPermissions(role)
+  return { ...role, perms: perms }
+}
+
+const splitPermissions = (role: Role) => {
+  return role
+    ? (role.permissions as string).split(', ').map(elm => {
+        return { name: elm }
+      })
+    : []
+}
+
+const mapStateToProps = (state: AppState, ownProps: RoleFormProps) => {
+  const { id } = ownProps.match.params
+  return {
+    blocking: state.blocking,
+    role:
+      id && state.roles.length > 0
+        ? getRoleById(state.roles, +id)
+        : { name: '', permissions: '', notes: '' }
+  }
+}
+
+const mapDispatchToProps = {
+  saveRole,
+  fetchRoles,
+  deleteRole
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoleForm)

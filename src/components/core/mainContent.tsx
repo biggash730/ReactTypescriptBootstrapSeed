@@ -6,6 +6,7 @@ import { AuthRoute } from './authRoute'
 import Login from '../auth/login'
 import Users from '../user/users'
 import Roles from '../role/roles'
+import PageNotFound from '../page-not-found'
 
 export interface MainContentProps {
   loggedIn: boolean
@@ -35,6 +36,7 @@ class MainContent extends React.Component<MainContentProps, MainContentState> {
           {/* <Route path={RouteNames.settings} render={() => <h1>Settings</h1>} /> */}
           <Route path={RouteNames.users} component={Users} />
           <Route path={RouteNames.roles} component={Roles} />
+          <Route component={PageNotFound} />
         </Switch>
       </div>
     )
