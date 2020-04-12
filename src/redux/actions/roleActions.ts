@@ -7,7 +7,7 @@ import { beginApiCall, endApiCall } from './apiStatusActions'
 
 export const getRolesSuccess: (roles: Role[]) => AppAction = (roles: Role[]) => ({
   type: ActionTypes.GET_ROLES_SUCCESS,
-  payload: roles
+  payload: roles,
 })
 
 export const createRoleSuccess: (role: Role) => AppAction = (role: Role) => {
@@ -24,7 +24,7 @@ export const deleteRoleOptimistic: (id: number) => AppAction = (id: number) => {
 
 export const fetchRoles = () => {
   return async (dispatch: Dispatch) => {
-    dispatch(beginApiCall())
+    dispatch(beginApiCall('Loading...'))
     try {
       const res = await axios.get(`/api/role`)
       dispatch(getRolesSuccess(res.data))
@@ -37,7 +37,7 @@ export const fetchRoles = () => {
 
 export const saveRole = (role: Role) => {
   return async (dispatch: Dispatch) => {
-    dispatch(beginApiCall())
+    dispatch(beginApiCall('Saving...'))
     try {
       if (role.id) {
         const res = await axios.put(`/api/role`, role)
@@ -47,7 +47,7 @@ export const saveRole = (role: Role) => {
         // dispatch(createRoleSuccess(role))
       }
 
-      dispatch(endApiCall())
+      // dispatch(endApiCall())
     } catch (err) {
       dispatch(endApiCall())
     }

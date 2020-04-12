@@ -10,7 +10,7 @@ export interface AppAction extends Action {
 
 const rootReducer = combineReducers<AppState>({
   roles: roleReducer,
-  blocking: apiStatusReducer
+  apiStatus: apiStatusReducer,
 })
 
 export default rootReducer
