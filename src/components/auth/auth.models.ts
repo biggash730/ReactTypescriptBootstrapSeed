@@ -15,3 +15,9 @@ export interface Role {
   permissions: string
   perms?: []
 }
+
+export interface Permission {
+  id: number
+  name: string
+  notes: string
+}
