@@ -16,8 +16,10 @@ const apiStatusReducer: Reducer<ApiStatusState> = (state = initialState, action:
   switch (action.type) {
     case ActionTypes.BEGIN_API_CALL:
       return { ...state, blocking: true, blockingMessage: action.payload }
+
     case ActionTypes.END_API_CALL:
       return { ...state, blocking: false, blockingMessage: '' }
+
     default:
       return state
   }

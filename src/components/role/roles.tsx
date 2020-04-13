@@ -16,7 +16,7 @@ export interface RolesProps {
   fetchRoles(): Promise<void>
 }
 
-const Roles: React.SFC<RolesProps> = ({ history, match, roles, fetchRoles }) => {
+const Roles: React.FC<RolesProps> = ({ history, match, roles, fetchRoles }) => {
   React.useEffect(() => {
     fetchRoles()
   }, [])

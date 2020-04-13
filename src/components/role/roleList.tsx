@@ -9,7 +9,7 @@ export interface RoleListProps {
   match: any
 }
 
-const RoleList: React.SFC<RoleListProps> = ({ roles, history, match }) => {
+const RoleList: React.FC<RoleListProps> = ({ roles, history, match }) => {
   return (
     <div className="row">
       <div className="col-sm-12">

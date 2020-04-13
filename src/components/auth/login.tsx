@@ -3,10 +3,14 @@ import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik'
 import * as Yup from 'yup'
 import './login.scss'
 import { authService } from './authService'
+import { AppState } from '../../redux/store'
+import { doLogin } from '../../redux/actions/authActions'
+import { connect } from 'react-redux'
 
 export interface LoginProps {
   history: any
-  onLogIn: (loggedIn: boolean) => void
+  doLogin(params: LoginParams): Promise<any>
+  // onLogIn: (loggedIn: boolean) => void
 }
 
 export interface LoginState {}
@@ -21,20 +25,23 @@ class Login extends React.Component<LoginProps, LoginState> {
   // state = { :  }
 
   login = (params: LoginParams) => {
-    authService
-      .login(params)
-      .then(user => {
-        authService.authenticated = true
-        authService.setUser(user)
-        this.props.onLogIn(true)
-        this.props.history.push('/dashboard')
-      })
-      .catch(err => {})
+    this.props.doLogin(params).then(() => {
+      this.props.history.push('/dashboard')
+    })
+    // authService
+    //   .login(params)
+    //   .then(user => {
+    //     authService.authenticated = true
+    //     authService.setUser(user)
+    //     this.props.onLogIn(true)
+    //     this.props.history.push('/dashboard')
+    //   })
+    //   .catch(err => {})
   }
 
   loginSchema = Yup.object().shape({
     username: Yup.string().required(),
-    password: Yup.string().required()
+    password: Yup.string().required(),
   })
 
   render() {
@@ -124,4 +131,10 @@ class Login extends React.Component<LoginProps, LoginState> {
   }
 }
 
-export default Login
+const mapStateToProps = (state: AppState) => ({})
+
+const mapDispatchToProps = {
+  doLogin,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

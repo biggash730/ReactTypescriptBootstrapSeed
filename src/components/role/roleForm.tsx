@@ -25,7 +25,7 @@ export interface RoleFormProps {
 
 const emptyRole = { name: '', permissions: '', notes: '' }
 
-const RoleForm: React.SFC<RoleFormProps> = (props) => {
+const RoleForm: React.FC<RoleFormProps> = (props) => {
   React.useEffect(() => {
     if (props.permissions.length === 0) {
       props.fetchPermissions()
