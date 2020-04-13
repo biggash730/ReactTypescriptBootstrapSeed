@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import './App.css'
@@ -7,10 +7,10 @@ import SideNav from './components/core/sidenav'
 import MainContent from './components/core/mainContent'
 // import Topnav from './components/core/topnav'
 import { RouteNames } from './contants'
-import { authService } from './components/auth/authService'
 import './helpers/interceptor'
 import { AppState } from './redux/store'
 import { connect } from 'react-redux'
+import { User } from './components/auth/auth.models'
 
 const menus = [
   {
@@ -47,13 +47,14 @@ const menus = [
 
 interface AppProps {
   loggedIn: boolean
+  user: User | null
 }
 
-const App: React.FC<AppProps> = ({ loggedIn }) => {
+const App: React.FC<AppProps> = ({ loggedIn, user }) => {
   return (
     <React.Fragment>
       <Router>
-        <Navbar />
+        <Navbar authenticated={loggedIn} currentUser={user} />
         {/* <Topnav menus={menus} /> */}
         <div id="wrapper" className="flex-row flex-grow-1">
           {loggedIn && <SideNav menus={menus} />}
@@ -66,6 +67,7 @@ const App: React.FC<AppProps> = ({ loggedIn }) => {
 
 const mapPropsToState = (state: AppState) => ({
   loggedIn: state.auth.loggedIn,
+  user: state.auth.user,
 })
 
 export default connect(mapPropsToState)(App)

@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { Role, Permission } from '../auth/auth.models'
 import Select from 'react-select'
-import axios from 'axios'
 import { History } from 'history'
 import { MessageDialog } from '../../helpers/message_helper'
 import { AppState } from '../../redux/store'
@@ -32,7 +31,7 @@ const RoleForm: React.FC<RoleFormProps> = (props) => {
     }
   }, [])
 
-  const handleSubmit = (role: Role, actions: FormikActions<Role>) => {
+  const handleSubmit = (role: Role) => {
     role.permissions = (role.perms && role.perms.map((obj: any) => obj.name).join(', ')) || ''
     props.saveRole(role).then(() => {
       props.fetchRoles()

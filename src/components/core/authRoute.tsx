@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router'
 import { RouteNames } from '../../contants'
-import { authService } from '../auth/authService'
 import { AppState } from '../../redux/store'
 import { connect } from 'react-redux'
 

@@ -1,22 +1,23 @@
 import axios from 'axios'
 import { Toast } from './message_helper'
-import { authService } from '../components/auth/authService'
+import { User } from '../components/auth/auth.models'
 
 axios.interceptors.request.use(
-  config => {
-    if (authService.currentUser) {
-      const user = authService.currentUser
-      config.headers = { Authorization: `Bearer ${user.token}` }
+  (config) => {
+    const user = localStorage.getItem('currentUser')
+    if (user) {
+      const currentUser: User = JSON.parse(user)
+      config.headers = { Authorization: `Bearer ${currentUser.token}` }
     }
     return config
   },
-  err => {
+  (err) => {
     return Promise.reject(err)
   }
 )
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     switch (response.status) {
       case 201:
         Toast.success('Record saved successfully')
@@ -33,7 +34,7 @@ axios.interceptors.response.use(
     }
     return response
   },
-  err => {
+  (err) => {
     if (err.response) {
       Toast.error(err.response.data.message)
     }

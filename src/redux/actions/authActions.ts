@@ -3,7 +3,7 @@ import { AppAction } from '../reducers'
 import { ActionTypes } from './actionTypes'
 import { Dispatch } from 'redux'
 import { beginApiCall, endApiCall } from './apiStatusActions'
-import { authService } from '../../components/auth/authService'
+import * as authService from '../../components/auth/authService'
 import { LoginParams } from '../../components/auth/login'
 
 const loginSuccess: (user: User) => AppAction = (user: User) => ({

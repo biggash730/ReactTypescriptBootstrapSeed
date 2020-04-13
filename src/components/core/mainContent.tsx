@@ -17,8 +17,6 @@ export interface MainContentProps {
   blockingMessage: string
 }
 
-export interface MainContentState {}
-
 const MainContent: React.FC<MainContentProps> = ({ blocking, blockingMessage, loggedIn }) => {
   return (
     <div className="main-content flex-fill p-2">
