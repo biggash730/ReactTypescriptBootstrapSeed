@@ -4,8 +4,10 @@ export interface User {
   phoneNumber: string
   email: string
   username: string
+  password?: string
+  passwordConfirmation?: string
   role: Role
-  token: string
+  token?: string
 }
 
 export interface Role {
@@ -20,4 +22,17 @@ export interface Permission {
   id: number
   name: string
   notes: string
+}
+
+export const emptyRole = { name: '', permissions: '', notes: '' }
+
+export const emptyUser: User = {
+  id: 0,
+  name: '',
+  username: '',
+  password: '',
+  passwordConfirmation: '',
+  email: '',
+  phoneNumber: '',
+  role: emptyRole,
 }

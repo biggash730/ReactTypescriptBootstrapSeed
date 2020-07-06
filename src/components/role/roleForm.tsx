@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import { Role, Permission } from '../auth/auth.models'
+import { Role, Permission, emptyRole } from '../auth/auth.models'
 import Select from 'react-select'
 import { History } from 'history'
 import { MessageDialog } from '../../helpers/message_helper'
@@ -21,8 +21,6 @@ export interface RoleFormProps {
   deleteRole(id: number): Promise<void>
   fetchPermissions(): Promise<void>
 }
-
-const emptyRole = { name: '', permissions: '', notes: '' }
 
 const RoleForm: React.FC<RoleFormProps> = (props) => {
   React.useEffect(() => {

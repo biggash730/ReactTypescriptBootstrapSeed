@@ -29,7 +29,7 @@ const Roles: React.FC<RolesProps> = ({ history, match, roles, fetchRoles }) => {
     <div>
       <Route
         exact
-        path="/roles"
+        path={RouteNames.roles}
         render={() => (
           <>
             <div className="row mb-3">

@@ -4,6 +4,7 @@ import { AppState } from '../store'
 import apiStatusReducer from './apiStatusReducer'
 import permissionReducer from './permissionReducer'
 import authReducer from './authReducer'
+import userReducer from './userReducer'
 
 export interface AppAction extends Action {
   payload?: any
@@ -15,6 +16,7 @@ const rootReducer = combineReducers<AppState>({
   apiStatus: apiStatusReducer,
   permissions: permissionReducer,
   auth: authReducer,
+  users: userReducer,
 })
 
 export default rootReducer

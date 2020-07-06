@@ -8,4 +8,5 @@ export enum ActionTypes {
   GET_PERMISSIONS_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAILED,
+  GET_USERS_SUCCESS,
 }

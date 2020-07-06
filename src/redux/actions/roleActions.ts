@@ -5,20 +5,20 @@ import { ActionTypes } from './actionTypes'
 import { AppAction } from '../reducers'
 import { beginApiCall, endApiCall } from './apiStatusActions'
 
-export const getRolesSuccess: (roles: Role[]) => AppAction = (roles: Role[]) => ({
+const getRolesSuccess: (roles: Role[]) => AppAction = (roles: Role[]) => ({
   type: ActionTypes.GET_ROLES_SUCCESS,
   payload: roles,
 })
 
-export const createRoleSuccess: (role: Role) => AppAction = (role: Role) => {
+const createRoleSuccess: (role: Role) => AppAction = (role: Role) => {
   return { type: ActionTypes.CREATE_ROLE_SUCCESS, payload: role }
 }
 
-export const updateRoleSuccess: (role: Role) => AppAction = (role: Role) => {
+const updateRoleSuccess: (role: Role) => AppAction = (role: Role) => {
   return { type: ActionTypes.UPDATE_ROLE_SUCCESS, payload: role }
 }
 
-export const deleteRoleOptimistic: (id: number) => AppAction = (id: number) => {
+const deleteRoleOptimistic: (id: number) => AppAction = (id: number) => {
   return { type: ActionTypes.DELETE_ROLE, id: id }
 }
 

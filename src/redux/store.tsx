@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, Store } from 'redux'
 import rootReducer from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import { Role, Permission } from '../components/auth/auth.models'
+import { Role, Permission, User } from '../components/auth/auth.models'
 import { ApiStatusState } from './reducers/apiStatusReducer'
 import { AuthState } from './reducers/authReducer'
 
@@ -11,6 +11,7 @@ export interface AppState {
   apiStatus: ApiStatusState
   permissions: Permission[]
   auth: AuthState
+  users: User[]
 }
 
 const user = localStorage.getItem('currentUser')

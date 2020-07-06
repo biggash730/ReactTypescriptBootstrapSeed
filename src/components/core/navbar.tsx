@@ -1,6 +1,6 @@
 import React from 'react'
 import './navbar.scss'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { RouteNames } from '../../contants'
 import { User } from '../auth/auth.models'
 
@@ -42,10 +42,16 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, authenticated }) => {
               </a>
             )}
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item">Action</a>
-              <a className="dropdown-item">Another action</a>
+              <Link to="/" className="dropdown-item">
+                Action
+              </Link>
+              <Link to="/" className="dropdown-item">
+                Another action
+              </Link>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item">Something else here</a>
+              <Link to="/" className="dropdown-item">
+                Something else here
+              </Link>
             </div>
           </li>
         </ul>
