@@ -1,17 +1,107 @@
 import React from 'react'
 import './navbar.scss'
-import { NavLink, Link } from 'react-router-dom'
-import { RouteNames } from '../../contants'
 import { User } from '../auth/auth.models'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import { Menu, MenuItem, Icon } from '@material-ui/core'
+import clsx from 'clsx'
 
 export interface NavbarProps {
   currentUser: User | null
   authenticated: boolean
+  open: boolean
+  toggleDrawer(): any
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser, authenticated }) => {
+const drawerWidth = 240
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    menuButton: {
+      marginRight: theme.spacing(1),
+    },
+    title: {
+      flexGrow: 1,
+    },
+    appBar: {
+      width: '100%',
+      zIndex: theme.zIndex.drawer + 1,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+  })
+)
+
+const Navbar: React.FC<NavbarProps> = ({ currentUser, authenticated, open, toggleDrawer }) => {
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
+    <AppBar position="fixed" color="transparent" className={classes.appBar}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={toggleDrawer}
+          edge="start"
+          className={classes.menuButton}>
+          <Icon className="fas fa-bars" />
+        </IconButton>
+        <img
+          src={require('../../assets/images/login.png')}
+          alt="Login Logo"
+          height="60"
+          width="60"
+          className={classes.menuButton}
+        />
+        <Typography variant="h6" className={classes.title}>
+          Clinic Master
+        </Typography>
+
+        {authenticated && (
+          <>
+            <Button
+              color="inherit"
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}>
+              {currentUser && currentUser.name}
+            </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}>
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
+  )
+}
+
+export default Navbar
+
+{
+  /* <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
       <NavLink className="navbar-brand" to={RouteNames.dashboard}>
         React App
       </NavLink>
@@ -56,8 +146,5 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, authenticated }) => {
           </li>
         </ul>
       </div>
-    </nav>
-  )
+    </nav> */
 }
-
-export default Navbar

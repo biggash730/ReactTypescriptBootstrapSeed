@@ -10,6 +10,10 @@ import PageNotFound from '../pageNotFound'
 import BlockUi from 'react-block-ui'
 import { AppState } from '../../redux/store'
 import { connect } from 'react-redux'
+import { makeStyles, createStyles } from '@material-ui/core'
+import Visit from '../reception/visit'
+import AppointmentForm from '../appointment/appointment-form'
+import Patient from '../reception/patient'
 
 export interface MainContentProps {
   loggedIn: boolean
@@ -17,9 +21,20 @@ export interface MainContentProps {
   blockingMessage: string
 }
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      overflow: 'auto',
+    },
+  })
+)
+
 const MainContent: React.FC<MainContentProps> = ({ blocking, blockingMessage, loggedIn }) => {
+  const classes = useStyles()
+
   return (
-    <div className="main-content flex-fill p-2">
+    // <div className="main-content flex-fill p-2"></div>
+    <div className={classes.root}>
       <BlockUi blocking={blocking} tag="div" message={blockingMessage}>
         <Switch>
           <Route exact={true} path="/" render={() => <Redirect to={RouteNames.dashboard} />} />
@@ -31,9 +46,9 @@ const MainContent: React.FC<MainContentProps> = ({ blocking, blockingMessage, lo
             }}
           />
           <AuthRoute path={RouteNames.dashboard} component={Dashboard} />
-          <AuthRoute path={RouteNames.products} component={Dashboard} />
-          {/* <Route path={RouteNames.reports} render={() => <h1>Reports</h1>} /> */}
-          {/* <Route path={RouteNames.settings} render={() => <h1>Settings</h1>} /> */}
+          <AuthRoute path={RouteNames.patients} component={Patient} />
+          <AuthRoute path={RouteNames.visits} component={Visit} />
+          <AuthRoute path={RouteNames.appointmentForm} component={AppointmentForm} />
           <AuthRoute path={RouteNames.users} component={Users} />
           <AuthRoute path={RouteNames.roles} component={Roles} />
           <Route component={PageNotFound} />
